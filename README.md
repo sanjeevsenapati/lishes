@@ -16,7 +16,7 @@ To use any of the scripts from this repository:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/lishes.git
+   git clone https://github.com/sanjeevsenapati/lishes.git
    cd lishes
    ```
 2. Review and customize the scripts as needed.
