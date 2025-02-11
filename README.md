@@ -67,7 +67,7 @@ We welcome contributions from the community. To contribute:
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ## Feedback and Support
-If you have any questions, suggestions, or issues, please open an issue in the repository or contact us through [email@example.com].
+If you have any questions, suggestions, or issues, please open an issue in the repository or contact us through [sanjeevsenapati@outlook.com].
 
 Happy scripting!
 
