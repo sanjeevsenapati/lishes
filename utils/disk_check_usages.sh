@@ -1,4 +1,9 @@
 #!/bin/bash
+# -----------------------------------------------------------------------------
+# Script Name : disk_check_usages.sh
+# Description : Checks disk space usage against warning thresholds.
+# Author      : Sanjeev Senapati
+# -----------------------------------------------------------------------------
 
 # Thresholds
 THRESHOLD_ORANGE=70

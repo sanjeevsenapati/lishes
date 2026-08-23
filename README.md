@@ -1,75 +1,52 @@
 # Lishes (Linux Shell Scripts)
 
-Welcome to **Lishes**, a comprehensive collection of simple and complex shell scripts designed to streamline system administration tasks and make life easier for Linux administrators.
+Welcome to **Lishes**, a comprehensive collection of simple and complex shell scripts designed to streamline system administration tasks and make life easier for Linux administrators and DevOps engineers.
+
+**Author / Maintainer**: Sanjeev Senapati
 
 ## Purpose
 Lishes aims to serve as a centralized repository for various shell scripts, catering to both routine and advanced system administration requirements. The project is built with the intention of sharing knowledge, promoting efficiency, and contributing to the DevOps and Linux administrator community.
 
-## Features
-- **Versatile Scripts:** Includes scripts for automation, monitoring, maintenance, and other administrative tasks.
-- **Efficiency Boost:** Save time by automating repetitive tasks.
-- **Customizable:** Easily adaptable to fit specific project or environment requirements.
-- **Open Source:** Contributions and improvements from the community are welcome.
+## Available Utility Scripts
 
-## Usage
-To use any of the scripts from this repository:
+### 📊 Monitoring (`monitoring/`)
+- [`monitoring/system_health_check.sh`](file:///Users/sanjeev/workspace/lishes/monitoring/system_health_check.sh): Quick system health dashboard displaying CPU load, memory stats, root/key disk usage, top CPU & memory consuming processes, systemd failed services, and active listening TCP ports.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/sanjeevsenapati/lishes.git
-   cd lishes
-   ```
-2. Review and customize the scripts as needed.
-3. Grant execution permissions (if not already set):
-   ```bash
-   chmod +x script_name.sh
-   ```
-4. Execute the script:
-   ```bash
-   ./script_name.sh
-   ```
+### ⚙️ Automation (`automation/`)
+- [`automation/ssl_cert_checker.sh`](file:///Users/sanjeev/workspace/lishes/automation/ssl_cert_checker.sh): SSL/TLS certificate expiry checker for domain names or batch domain lists with configurable warning day thresholds.
+- [`automation/log_cleaner.sh`](file:///Users/sanjeev/workspace/lishes/automation/log_cleaner.sh): Automated log maintenance tool to compress (`.gz`) or purge old log files beyond retention thresholds with dry-run support.
 
-> **Note:** Ensure you have the necessary permissions and prerequisites for each script.
+### 📦 Backups (`backups/`)
+- [`backups/tar_rotate_backup.sh`](file:///Users/sanjeev/workspace/lishes/backups/tar_rotate_backup.sh): Creates timestamped `.tar.gz` archives of directories, computes SHA256 verification checksums, and rotates/prunes backups older than N days.
 
-## Directory Structure
-```
-lishes/
-|-- backups/
-|-- monitoring/
-|-- automation/
-|-- utils/
-|-- README.md
-```
-- **backups/**: Scripts for backup and restoration tasks.
-- **monitoring/**: Scripts for system and application monitoring.
-- **automation/**: Scripts for automating routine administrative tasks.
-- **maintenance/**: Scripts for maintenance and system cleanup.
-- **utils/**: Miscellaneous utility scripts.
+### 🌐 Networks (`networks/`)
+- [`networks/port_checker.sh`](file:///Users/sanjeev/workspace/lishes/networks/port_checker.sh): TCP connectivity, port availability, and response latency tester for target host IP/domain and port.
+- [`networks/network_info.sh`](file:///Users/sanjeev/workspace/lishes/networks/network_info.sh): Displays network interfaces and assigned IPv4/IPv6 addresses across OS environments.
 
-## Contributions
-We welcome contributions from the community. To contribute:
-1. Fork the repository.
-2. Create a feature branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Add new feature description"
-   ```
-4. Push to your branch:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a pull request.
-
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Feedback and Support
-If you have any questions, suggestions, or issues, please open an issue in the repository or contact us through [sanjeevsenapati@outlook.com].
-
-Happy scripting!
+### 🛠️ Utilities (`utils/`)
+- [`utils/docker_cleanup.sh`](file:///Users/sanjeev/workspace/lishes/utils/docker_cleanup.sh): DevOps cleanup utility to safely prune stopped containers, dangling/unused images, build cache, and volume data.
+- [`utils/disk_check_usages.sh`](file:///Users/sanjeev/workspace/lishes/utils/disk_check_usages.sh): Monitors disk partition usage against warning thresholds with color-coded alert formatting.
 
 ---
 
+## Usage
+
+1. Grant execution permissions:
+   ```bash
+   chmod +x <script_name>.sh
+   ```
+
+2. Execute desired script:
+   ```bash
+   ./monitoring/system_health_check.sh
+   ./automation/ssl_cert_checker.sh -d example.com
+   ./backups/tar_rotate_backup.sh -s /path/to/source -d /path/to/backups
+   ./utils/docker_cleanup.sh -f
+   ./networks/port_checker.sh -h google.com -p 443
+   ```
+
+## Author
+**Sanjeev Senapati** ([sanjeevsenapati@outlook.com](mailto:sanjeevsenapati@outlook.com))
+
+## License
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

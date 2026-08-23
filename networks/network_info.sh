@@ -1,4 +1,9 @@
 #!/bin/bash
+# -----------------------------------------------------------------------------
+# Script Name : network_info.sh
+# Description : Displays network interfaces and assigned IP addresses.
+# Author      : Sanjeev Senapati
+# -----------------------------------------------------------------------------
 
 echo "Network Devices and IP Addresses:"
 echo "----------------------------------"
