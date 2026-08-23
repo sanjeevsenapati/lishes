@@ -24,6 +24,7 @@ Lishes aims to serve as a centralized repository for various shell scripts, cate
 - [`networks/network_info.sh`](file:///Users/sanjeev/workspace/lishes/networks/network_info.sh): Displays network interfaces and assigned IPv4/IPv6 addresses across OS environments.
 
 ### 🛠️ Utilities (`utils/`)
+- [`utils/nginx_log_viewer.sh`](file:///Users/sanjeev/workspace/lishes/utils/nginx_log_viewer.sh): AWK-powered log highlighter for Nginx standard access logs and Nginx WAF / Firelog security format.
 - [`utils/docker_cleanup.sh`](file:///Users/sanjeev/workspace/lishes/utils/docker_cleanup.sh): DevOps cleanup utility to safely prune stopped containers, dangling/unused images, build cache, and volume data.
 - [`utils/disk_check_usages.sh`](file:///Users/sanjeev/workspace/lishes/utils/disk_check_usages.sh): Monitors disk partition usage against warning thresholds with color-coded alert formatting.
 
