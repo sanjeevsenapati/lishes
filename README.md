@@ -20,6 +20,7 @@ Lishes aims to serve as a centralized repository for various shell scripts, cate
 - [`backups/tar_rotate_backup.sh`](file:///Users/sanjeev/workspace/lishes/backups/tar_rotate_backup.sh): Creates timestamped `.tar.gz` archives of directories, computes SHA256 verification checksums, and rotates/prunes backups older than N days.
 
 ### Networks (`networks/`)
+- [`networks/nc_port_tester.sh`](file:///Users/sanjeev/workspace/lishes/networks/nc_port_tester.sh): Pre-deployment port & firewall connectivity verification tool running in server (listener) or client (prober) mode using Netcat (`nc`).
 - [`networks/port_checker.sh`](file:///Users/sanjeev/workspace/lishes/networks/port_checker.sh): TCP connectivity, port availability, and response latency tester for target host IP/domain and port.
 - [`networks/network_info.sh`](file:///Users/sanjeev/workspace/lishes/networks/network_info.sh): Displays network interfaces and assigned IPv4/IPv6 addresses across OS environments.
 
