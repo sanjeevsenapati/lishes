@@ -1,9 +1,9 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
 # Script Name : nginx_daily_requests.sh
-# Description : Aggregates and prints daily request counts, HTTP status breakdown
-#               (2xx, 3xx, 4xx, 5xx), and unique visitor IPs from plain or .gz
-#               Nginx log files.
+# Description : Aggregates daily request counts, HTTP status code breakdown,
+#               unique visitor IPs, and throughput metrics (TPS - Requests/sec,
+#               TPM - Requests/min) from plain or .gz Nginx log files.
 # Author      : Sanjeev Senapati
 # -----------------------------------------------------------------------------
 
@@ -42,11 +42,10 @@ else
   done
 fi
 
-# Function to reader stream (.gz vs plain)
+# Stream logs (.gz vs plain text)
 stream_logs() {
   for path in "${LOG_PATHS[@]}"; do
     if [ -d "$path" ]; then
-      # Find plain and .gz files in directory
       find "$path" -type f \( -name "*.log" -o -name "*.log*.gz" -o -name "access*" \) | while read -r f; do
         if [[ "$f" == *.gz ]]; then
           gzip -dc "$f" 2>/dev/null || true
@@ -65,21 +64,26 @@ stream_logs() {
 }
 
 echo -e "${BLUE}=====================================================${NC}"
-echo -e "${BLUE}         Nginx Daily Request Traffic Analyzer        ${NC}"
-echo -e "${BLUE}         Author: Sanjeev Senapati                    ${NC}"
+echo -e "${BLUE}     Nginx Daily Request Traffic & TPS/TPM Analyzer  ${NC}"
+echo -e "${BLUE}     Author: Sanjeev Senapati                        ${NC}"
 echo -e "${BLUE}=====================================================${NC}\n"
 
-# Process stream via AWK
 stream_logs | awk '
 BEGIN {
-  printf "%-15s %-12s %-10s %-10s %-10s %-10s %-12s\n", "DATE", "TOTAL REQS", "2xx (OK)", "3xx (REDIR)", "4xx (CLIENT)", "5xx (SERVER)", "UNIQUE IPs"
-  print "----------------------------------------------------------------------------------------"
+  printf "%-13s %-9s %-9s %-9s %-9s %-9s %-9s %-9s %-9s %-9s\n", 
+    "DATE", "TOTAL", "2xx", "3xx", "4xx", "5xx", "AVG TPS", "PEAK TPS", "AVG TPM", "PEAK TPM"
+  print "-----------------------------------------------------------------------------------------------------------------"
 }
 {
-  # Extract timestamp [23/Aug/2026:20:00:00 +0530]
-  match($0, /\[[0-9]{2}\/[A-Za-z]{3}\/[0-9]{4}/)
+  # Extract timestamp: [23/Aug/2026:20:00:15 +0530]
+  match($0, /\[[0-9]{2}\/[A-Za-z]{3}\/[0-9]{4}:[0-9]{2}:[0-9]{2}:[0-9]{2}/)
   if (RSTART > 0) {
-    date_str = substr($0, RSTART + 1, RLENGTH - 1)
+    full_ts = substr($0, RSTART + 1, RLENGTH - 1)
+    
+    # Extract components
+    date_str = substr(full_ts, 1, 11)        # 23/Aug/2026
+    minute_str = substr(full_ts, 1, 17)      # 23/Aug/2026:20:00
+    sec_str = full_ts                        # 23/Aug/2026:20:00:15
     ip = $1
 
     # Extract status code
@@ -92,7 +96,18 @@ BEGIN {
     dates[date_str]++
     total_count++
 
-    # Track Unique IPs per date
+    # Track Per-Second (TPS) and Per-Minute (TPM) buckets
+    sec_buckets[sec_str]++
+    min_buckets[minute_str]++
+
+    if (sec_buckets[sec_str] > peak_tps[date_str]) {
+      peak_tps[date_str] = sec_buckets[sec_str]
+    }
+    if (min_buckets[minute_str] > peak_tpm[date_str]) {
+      peak_tpm[date_str] = min_buckets[minute_str]
+    }
+
+    # Unique IPs per day
     ip_key = date_str " " ip
     if (!(ip_key in unique_ips)) {
       unique_ips[ip_key] = 1
@@ -116,12 +131,18 @@ END {
     s3 = (d in status_3xx) ? status_3xx[d] : 0
     s4 = (d in status_4xx) ? status_4xx[d] : 0
     s5 = (d in status_5xx) ? status_5xx[d] : 0
-    uip = (d in unique_ip_count) ? unique_ip_count[d] : 0
 
-    printf "%-15s %-12d %-10d %-10d %-10d %-10d %-12d\n", d, dates[d], s2, s3, s4, s5, uip
+    tot = dates[d]
+    avg_tps = tot / 86400.0
+    avg_tpm = tot / 1440.0
+    ptps = (d in peak_tps) ? peak_tps[d] : 0
+    ptpm = (d in peak_tpm) ? peak_tpm[d] : 0
+
+    printf "%-13s %-9d %-9d %-9d %-9d %-9d %-9.2f %-9d %-9.2f %-9d\n", 
+      d, tot, s2, s3, s4, s5, avg_tps, ptps, avg_tpm, ptpm
   }
 
-  print "----------------------------------------------------------------------------------------"
+  print "-----------------------------------------------------------------------------------------------------------------"
   printf "TOTAL REQUESTS PROCESSED: %d\n", total_count
 }
 ' | sort -k1.8,1.11n -k1.4,1.6M -k1.1,1.2n
